@@ -20,16 +20,6 @@ func init() {
 				&controllers.WeatherController{},
 			),
 		),
-		beego.NSNamespace("/object",
-			beego.NSInclude(
-				&controllers.ObjectController{},
-			),
-		),
-		beego.NSNamespace("/user",
-			beego.NSInclude(
-				&controllers.UserController{},
-			),
-		),
 	)
 	beego.AddNamespace(ns)
 }
