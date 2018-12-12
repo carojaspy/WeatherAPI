@@ -6,3 +6,9 @@ Weather proyect using beego framekwork
 
 The measure of time is in __time.info__ file.
 
+
+bee run -gendoc=true
+bee generate controller Weather
+
+
+
