@@ -12,3 +12,11 @@ bee generate controller Weather
 
 
 
+docker build -t weather-api-image .
+docker-compose build
+docker-compose run
+
+
+dep.exe init
+dep.exe ensure -v
+

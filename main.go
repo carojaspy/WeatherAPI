@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "WeatherAPI/routers"
+	_ "github.com/carojaspy/WeatherAPI/routers"
 	"fmt"
-
+	"log"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -12,12 +12,22 @@ import (
 func init() {
 	// Set UP database on INIT
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	// "USER:PASS@/DBNAME?charset=utf8"
-	ormURI := fmt.Sprintf("%s:%s@/%s?charset=utf8",
-		beego.AppConfig.String("mysqluser"),
+	// "$USER:PASS@tcp($HOST:$PORT)/DBNAME",	
+	// "%s:%s@tcp(%s:%s)/%s"
+	log.Printf("================ %v - %v - %v \n",  beego.AppConfig.String("mysqluser"), beego.AppConfig.String("mysqlpass"), beego.AppConfig.String("mysqldb"))
+
+	// ormURI := fmt.Sprintf("%s:%s@/%s?charset=utf8",
+	ormURI := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8",
+	beego.AppConfig.String("mysqluser"),
 		beego.AppConfig.String("mysqlpass"),
+		beego.AppConfig.String("mysqlhost"),
+		beego.AppConfig.String("mysqlport"),				
 		beego.AppConfig.String("mysqldb"))
-	orm.RegisterDataBase("default", "mysql", ormURI)
+	log.Printf(ormURI)
+	// orm.RegisterDataBase("default", "mysql", ormURI)
+
+	orm.RegisterDataBase("default", "mysql", "root:@tcp(weather_api_db:3306)/weatherapi?charset=utf8")
+
 }
 func main() {
 	// Init ORM
@@ -47,3 +57,5 @@ func main() {
 	}
 	beego.Run()
 }
+
+// ## docker-compose run app $COMANDO 

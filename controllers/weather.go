@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"time"
-	"WeatherAPI/models"
+	"github.com/carojaspy/WeatherAPI/models"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
