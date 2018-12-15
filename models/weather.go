@@ -3,9 +3,25 @@ package models
 import (
 	"fmt"
 	"time"
-
+	"log"
+    "errors"
 	"github.com/astaxie/beego/orm"
 )
+
+// LapseSeconds . 
+const LapseSeconds = 300
+func getLapse() float64 {
+	// Returns the time to compare between 2 dates
+	return LapseSeconds
+}
+
+// Database .
+type Database interface {
+	Get(o *orm.Ormer)  error
+	GetAll(o *orm.Ormer)  error
+	Save(o *orm.Ormer) error
+	IsValid(o *orm.Ormer) error
+}
 
 // WheatherJSON .
 type WheatherJSON struct {
@@ -36,6 +52,63 @@ type Weather struct {
 	GeoCoordinates string
 	RequestedTime time.Time
 }
+
+// Get Fetch a single object from Db
+func (w *Weather) Get(o orm.Ormer) error {
+	return errors.New("Not implemented")
+}
+  
+// Save Persist the Objet to the Database
+func (w *Weather) Save(o orm.Ormer) error {
+	// fmt.Println("Inserting row ...")
+	id, err := o.Insert(w)
+	if err == nil {
+		fmt.Printf("Weather Row inserted with ID: %v", id)
+		return nil
+	}
+	return err
+}
+
+// IsValid . Check if has elapsed 300 seconds to insert a new row
+func (w *Weather) IsValid(o orm.Ormer) error {
+	qs := o.QueryTable(*w) // return a QuerySeter
+	qs.Filter("Location", w.Location)
+
+	/*	Check if there's	*/
+	var lastRow Weather
+
+	// Just One row
+	err := qs.OrderBy("-Id").One(&lastRow)
+	if err != nil {
+		// No previous rows inserted to DB
+		log.Println(err)
+		return nil
+	} else {
+		log.Println("Sucess getting weather objects from db")
+		// elapsedTime := time.Until(lastRow.RequestedTime.UTC())
+		elapsedTime := time.Since(lastRow.RequestedTime.UTC())
+		log.Printf("seconds: %v, LAPSE: %v, %v", elapsedTime.Seconds(), getLapse(), elapsedTime.Seconds() < getLapse())
+		if elapsedTime.Seconds() > getLapse(){
+			log.Println("New row !!")
+			return nil
+		} else {
+			// still not pass enough time to save another row
+			return fmt.Errorf("You cant insert yet: seconds: %v", elapsedTime.Seconds())
+		}	//End time elapsed comparission
+	}// End QueryFilter if
+}
+
+// GetAll Implementing GetAll method from Database to get All rows
+func (w *Weather) GetAll(o orm.Ormer)  ([]*Weather, error){
+	log.Println("GetAll method")
+	var weathers []* Weather
+	_, err := o.QueryTable(new(Weather)).All(&weathers)
+	if err != nil {
+		log.Println(err)
+	}
+	return weathers, err
+}
+
 
 func init() {
 	// Need to register model in init

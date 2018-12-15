@@ -9,20 +9,10 @@ import (
 	"log"
 	"net/http"
 	"errors"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
-// timeOffset . 
-const timeOffset = 21600.0
-// LapseSeconds . 
-const LapseSeconds = - 300
-
-func getLapse() float64 {
-	// Returns the time to compare between 2 dates
-	return timeOffset + LapseSeconds
-}
 
 // WeatherController operations for Weather
 type WeatherController struct {
@@ -74,6 +64,7 @@ func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,e
 	return wjson, nil
 }//end GetWeatherFromProvider
 
+
 // Get ...
 // @Title Get 
 // @Description get Weather by id
@@ -100,46 +91,19 @@ func (controller *WeatherController) Get() {
 	weatherdb := models.Weather{}
 	weatherdb = models.FillingDBModel(wjson)
 
-	// Insert Weather to DB
 	o := orm.NewOrm()
 	qs := o.QueryTable(weatherdb) // return a QuerySeter
 	qs.Filter("Location", weatherdb.Location)
 
-	//var weather *models.Weather
-	var lastRow models.Weather
-	insertRow := false
-
-	// Just One row
-	err = qs.OrderBy("-Id").One(&lastRow)
-	if err != nil {
-		log.Println(err)
-		// No previous Rows, insert to DB
-		insertRow = true
-	} else {
-		log.Println("Sucess getting weather objects from db")
-		elapsedTime := time.Until(lastRow.RequestedTime.UTC())
-
-		// log.Println(elapsedTime)
-		log.Printf("seconds: %v, LAPSE: %v, %v", elapsedTime.Seconds(), getLapse(), elapsedTime.Seconds() < getLapse())
-		if elapsedTime.Seconds() < getLapse(){
-			log.Println("New row !!")
-			insertRow = true
-		} else {
-			// still not pass enough time to save another row
-			log.Println("You cant insert yet ")
-		}
-	}// End
-	// If requests pass all validation, save in Databsae
-	if insertRow {
-		fmt.Println("Inserting row ...")
-		id, err := o.Insert(&weatherdb)
-		if err == nil {
-			fmt.Println(id)
-		}
+	//	Check if is a valid new row ( >300 seconds)	
+	if err := weatherdb.IsValid(o); err == nil {
+		//Trying to to DB
+		weatherdb.Save(o)
 	}
 	controller.Data["json"] = weatherdb
 	controller.ServeJSON()
-}
+}//End Get Method
+
 
 // GetAll ...
 // @Title GetAll 
@@ -149,17 +113,16 @@ func (controller *WeatherController) Get() {
 // @router /all [get]
 func (controller *WeatherController) GetAll() {
 	/**/
-	log.Println("GetAll method")
-
+	log.Println("GetAll Weather Controller")
 	o := orm.NewOrm()
 	var weathers []*models.Weather
 	num, err := o.QueryTable(new(models.Weather)).All(&weathers)
 	if err != nil {
 		log.Println(err)
-		panic(err)
+		controller.CustomAbort(404, err.Error())
 	}
 	log.Println("SUcess getting weather objects from db")
 	log.Println(num)
 	controller.Data["json"] = weathers
 	controller.ServeJSON()
-}
+}// End GetAll Method
