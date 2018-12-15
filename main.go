@@ -4,10 +4,38 @@ import (
 	_ "github.com/carojaspy/WeatherAPI/routers"
 	"fmt"
 	"log"
+	"time"
+	"math/rand"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+func EmulateWeatherTask(id int) {
+	log.Printf("Done Task %v", id)
+}
+
+func WeatherScraping(){
+	log.Println("WeatherScraping")
+	log.Println("Getting Tasks from DB: ...")
+	time.Sleep(time.Second)
+	for i:=1; i<10; i++ {
+		time.Sleep(time.Second*1)
+		go EmulateWeatherTask(rand.Intn(100))
+	}
+	log.Println("All task were sended to invoke. Done")
+	// At the end 
+}
+
+// CallMeAsync . 
+func CallMeAsync(){
+	go WeatherScraping()
+	log.Println("CallMeAsync")
+	// Call this Each Minute
+	time.Sleep(time.Minute)
+	go WeatherScraping()
+}
+
 
 func init() {
 	// Set UP database on INIT
@@ -24,9 +52,8 @@ func init() {
 		beego.AppConfig.String("mysqlport"),				
 		beego.AppConfig.String("mysqldb"))
 	log.Printf(ormURI)
-	// orm.RegisterDataBase("default", "mysql", ormURI)
-
-	orm.RegisterDataBase("default", "mysql", "root:@tcp(weather_api_db:3306)/weatherapi?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", ormURI)
+	// orm.RegisterDataBase("default", "mysql", "root:@tcp(weather_api_db:3306)/weatherapi?charset=utf8")
 
 }
 func main() {
@@ -55,6 +82,7 @@ func main() {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
+	go CallMeAsync()
 	beego.Run()
 }
 
