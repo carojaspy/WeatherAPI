@@ -28,14 +28,14 @@ services:
   weather_api_db:   
     image: mysql:5.7
     container_name: weather_api_db
-    volumes:
-          - ./mysql/data/dev:/var/lib/mysql
-          - ./mysql/data/keys/dev:/var/lib/mysql-keyring
-          - ./conf/mysql:/etc/mysql/conf.d
+    # volumes:
+    #       - ./mysql/data/dev:/var/lib/mysql
+    #       - ./conf/mysql:/etc/mysql/conf.d
 
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=weatherapi
+      
     networks:
       - default
     ports:

@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"fmt"
+	"log"
+	"github.com/carojaspy/WeatherAPI/models"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 // SchedulerController operations for Scheduler
@@ -46,7 +49,24 @@ func (c *SchedulerController) GetAll() {
 // @Success 200 {object} models.Scheduler
 // @Failure 403 :id is not int
 // @router /weather [put]
-func (c *SchedulerController) Put() {
+func (controller *SchedulerController) Put() {
 	fmt.Println("Put new routine controller")
-}
+	o := orm.NewOrm()
+
+	// Trying to retrieve the params from URL
+	city := "Mexico" // Mexico
+	country := "mx" // mx
+	log.Printf("%v - %v ", city, country)
+
+	// Saving info in Task model
+	t := models.Task{City:city, Country:country}
+	log.Printf("%v", t)
+	if err:= t.IsValid(o); err==nil {
+		log.Println("Valid Task, persists to DB")
+		log.Printf("%v - %v ", city, country)
+	}// EndIF
+	controller.Data["json"] = t
+	controller.ServeJSON()
+
+}// EndPut Method
 
