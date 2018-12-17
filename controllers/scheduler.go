@@ -35,7 +35,7 @@ func callPeriodicTask(city string, country string){
 // @Success 200 {object} models.Scheduler
 // @Failure 403
 // @router / [get]
-func (c *SchedulerController) GetAll() {
+func (controller *SchedulerController) GetAll() {
 	fmt.Println("GetAll routine controller")
 
 
@@ -54,19 +54,21 @@ func (controller *SchedulerController) Put() {
 	o := orm.NewOrm()
 
 	// Trying to retrieve the params from URL
-	city := "Mexico" // Mexico
-	country := "mx" // mx
+	city := controller.GetString("city") // Mexico
+	country := controller.GetString("country") // mx
 	log.Printf("%v - %v ", city, country)
 
 	// Saving info in Task model
-	t := models.Task{City:city, Country:country}
+	t := models.Task{City:city, Country:country, IsActive:true}
 	log.Printf("%v", t)
-	if err:= t.IsValid(o); err==nil {
-		log.Println("Valid Task, persists to DB")
+	if err:= t.IsValid(o); err!=nil {
+		log.Println("Invalid Task to persist to Database: ", err.Error())
+	} else {
+		log.Println("Valid Task, persists to DB: ")
 		log.Printf("%v - %v ", city, country)
-	}// EndIF
+		t.Save(o)
+	}
 	controller.Data["json"] = t
 	controller.ServeJSON()
-
 }// EndPut Method
 

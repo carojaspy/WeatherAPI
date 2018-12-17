@@ -72,13 +72,12 @@ func (w *Weather) Save(o orm.Ormer) error {
 // IsValid . Check if has elapsed 300 seconds to insert a new row
 func (w *Weather) IsValid(o orm.Ormer) error {
 	qs := o.QueryTable(*w) // return a QuerySeter
-	qs.Filter("Location", w.Location)
 
-	/*	Check if there's	*/
+	/*	Check if there's */
 	var lastRow Weather
 
 	// Just One row
-	err := qs.OrderBy("-Id").One(&lastRow)
+	err := qs.OrderBy("-Id").Filter("Location", w.Location).One(&lastRow)
 	if err != nil {
 		// No previous rows inserted to DB
 		log.Println(err)

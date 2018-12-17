@@ -99,6 +99,8 @@ func (controller *WeatherController) Get() {
 	if err := weatherdb.IsValid(o); err == nil {
 		//Trying to to DB
 		weatherdb.Save(o)
+	} else {
+		log.Println(err.Error())
 	}
 	controller.Data["json"] = weatherdb
 	controller.ServeJSON()

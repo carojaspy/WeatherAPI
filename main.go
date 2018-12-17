@@ -2,38 +2,66 @@ package main
 
 import (
 	_ "github.com/carojaspy/WeatherAPI/routers"
+	"github.com/carojaspy/WeatherAPI/models"
+	"github.com/carojaspy/WeatherAPI/controllers"
 	"fmt"
 	"log"
 	"time"
-	"math/rand"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func EmulateWeatherTask(id int) {
-	log.Printf("Done Task %v", id)
+// EmulateWeatherTask . 
+func EmulateWeatherTask(city string, country string, o orm.Ormer) {
+	// log.Printf("Done Task %v - %s", city, country)
+	result, err := controllers.GetWeatherFromProvider(city, country)
+	if err != nil {
+		log.Printf("Error Running Task %v - %s : %v", city, country, err.Error())
+		return 
+	}
+	// response := models.FillingResponse(wjson)
+	weatherdb := models.Weather{}
+	weatherdb = models.FillingDBModel(result)
+	//Trying to to DB
+	weatherdb.Save(o)
+	// Continue 
 }
 
-func WeatherScraping(){
+// WeatherScraping . 
+func WeatherScraping(o orm.Ormer){
 	log.Println("WeatherScraping")
 	log.Println("Getting Tasks from DB: ...")
-	time.Sleep(time.Second)
-	for i:=1; i<10; i++ {
-		time.Sleep(time.Second*1)
-		go EmulateWeatherTask(rand.Intn(100))
+
+	//	@TODO	Move the FetchAll objects to a Interface Method
+	var tasks []*models.Task
+	num, err := o.QueryTable(new(models.Task)).All(&tasks)
+	if err != nil {
+		log.Println(err)
+		return
 	}
-	log.Println("All task were sended to invoke. Done")
-	// At the end 
+	if num > 0 {
+		log.Printf("Sucess getting %v tasks objects from db", num)
+		for _, task := range tasks {
+			time.Sleep(time.Second*1)
+			go EmulateWeatherTask(task.City, task.Country, o)
+		}
+		log.Println("All task were sended to invoke. Done")
+		// At the end 	
+	} else {
+		log.Println("No rows, Nothing to do")
+	}
 }
 
 // CallMeAsync . 
-func CallMeAsync(){
-	go WeatherScraping()
+func CallMeAsync(o orm.Ormer){
+	go WeatherScraping(o)
 	log.Println("CallMeAsync")
 	// Call this Each Minute
-	time.Sleep(time.Minute)
-	go WeatherScraping()
+	for {
+		time.Sleep(time.Minute)
+		go WeatherScraping(o)
+	}
 }
 
 
@@ -82,7 +110,9 @@ func main() {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
-	go CallMeAsync()
+
+	// To Call Go routines (Periodic Tasks)
+	// go CallMeAsync(o)
 	beego.Run()
 }
 
