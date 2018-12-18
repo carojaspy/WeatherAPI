@@ -1,11 +1,52 @@
 
 Timing of Tasks
 
-1. Reading doc         -    4hrs
-2. Setup Proyect       -    1hrs
-3. WeatherController   -    3hrs
-4. WeatherRouter       -    1hrs
-4. JSON Decode/Encode  -    3hrs
-5. Testing             -    2hrs
-6. Doc                 -    2hrs
+WeatherAPI-v1
+1. Reading doc              -    4hrs
+2. Setup Proyect            -    1hrs
+3. WeatherController        -    3hrs
+4. WeatherRouter            -    1hrs
+4. JSON Decode/Encode       -    3hrs
+5. Testing                  -    2hrs
+6. Doc                      -    2hrs
+----------------------------------------------
+
+
+WeatherAPI-v2
+2. Weather Model Definition -   2hrs
+3. Model Implementation     -   2hrs
+4. Database
+    Install MySQL(Local)    -   30min
+    Setup DB and Tables     -   2hrs
+    ORM Connection          -   2hrs
+    Load/Fetch Operation    -   1hrs
+    Save Operation          -   1hrs
+5. Validatrions
+    Incomplete params       -   1hrs
+    Request.time > 300secs  -   2hrs
+    Rows Exists             -   1hrs
+6. Testing
+    postman setup           -   1hrs
+        Includes, Collection setup, variables
+    postman url testing     -   1hrs
+----------------------------------------------
+
+
+WeatherAPI-v3
+1. Task Model Definition    -   2hrs
+2. Task Router Definition   -   30min
+2. Task Controller          -   2hrs
+4. Interfaces
+    Definition              -   1hrs
+    CRUD operations to Model-   6hrs
+5. Database
+    Task table setup        -   30min
+    MySQL-Docker Connection -   3hrs
+6 Swagger Description       -   1hrs
+7 Docker Integration
+    Dockerfile              -   4hrs
+    docker-compose.yml      -   5hrs
+8. Testing
+    postman url testing     -   2hrs
+----------------------------------------------
 

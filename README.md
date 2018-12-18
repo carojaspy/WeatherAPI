@@ -20,3 +20,6 @@ docker-compose run
 dep.exe init
 dep.exe ensure -v
 
+##### Enter to container in mode interactive
+docker exec -ti weather_api /bin/bash
+
