@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"time"
 	"github.com/carojaspy/WeatherAPI/models"
 	"encoding/json"
 	"fmt"
@@ -74,7 +73,7 @@ func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,e
 func (controller *WeatherController) Get() {
 	/**/
 	log.Print("Handle for Get WeatherController Requests")
-	log.Print(time.Now())
+	// log.Print(time.Now())
 	// Trying to retrieve the params from URL
 	city := controller.GetString("city") // Mexico
 	country := controller.GetString("country") // mx

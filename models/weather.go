@@ -86,7 +86,7 @@ func (w *Weather) IsValid(o orm.Ormer) error {
 		log.Println("Sucess getting weather objects from db")
 		// elapsedTime := time.Until(lastRow.RequestedTime.UTC())
 		elapsedTime := time.Since(lastRow.RequestedTime.UTC())
-		log.Printf("seconds: %v, LAPSE: %v, %v", elapsedTime.Seconds(), getLapse(), elapsedTime.Seconds() < getLapse())
+		// log.Printf("seconds: %v, LAPSE: %v, %v", elapsedTime.Seconds(), getLapse(), elapsedTime.Seconds() < getLapse())
 		if elapsedTime.Seconds() > getLapse(){
 			log.Println("New row !!")
 			return nil
