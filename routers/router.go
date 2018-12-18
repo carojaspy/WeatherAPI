@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"WeatherAPI/controllers"
+	"github.com/carojaspy/WeatherAPI/controllers"
 
 	"github.com/astaxie/beego"
 )
@@ -20,12 +20,6 @@ func init() {
 				&controllers.WeatherController{},
 			),
 		),
-		beego.NSNamespace("/scheduler",
-			beego.NSInclude(
-				&controllers.SchedulerController{},
-			),
-		),
-
 	)
 	beego.AddNamespace(ns)
 }
