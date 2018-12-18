@@ -1,15 +1,17 @@
 package models
 
 import (
+	"errors"
 	"fmt"
-	"time"
 	"log"
-    "errors"
+	"time"
+
 	"github.com/astaxie/beego/orm"
 )
 
-// LapseSeconds . 
+// LapseSeconds .
 const LapseSeconds = 300
+
 func getLapse() float64 {
 	// Returns the time to compare between 2 dates
 	return LapseSeconds
@@ -17,8 +19,8 @@ func getLapse() float64 {
 
 // Database .
 type Database interface {
-	Get(o *orm.Ormer)  error
-	GetAll(o *orm.Ormer)  error
+	Get(o *orm.Ormer) error
+	GetAll(o *orm.Ormer) error
 	Save(o *orm.Ormer) error
 	IsValid(o *orm.Ormer) error
 }
@@ -40,24 +42,24 @@ type WheatherJSON struct {
 
 // Weather .
 type Weather struct {
-	Id            int
-	Location      string
-	Temperature   string
-	Wind          string
-	Cloudines     string
-	Presure       string
-	Humidity      string
-	Sunrise       string
-	Sunset string 
+	Id             int
+	Location       string
+	Temperature    string
+	Wind           string
+	Cloudines      string
+	Presure        string
+	Humidity       string
+	Sunrise        string
+	Sunset         string
 	GeoCoordinates string
-	RequestedTime time.Time
+	RequestedTime  time.Time
 }
 
 // Get Fetch a single object from Db
 func (w *Weather) Get(o orm.Ormer) error {
 	return errors.New("Not implemented")
 }
-  
+
 // Save Persist the Objet to the Database
 func (w *Weather) Save(o orm.Ormer) error {
 	// fmt.Println("Inserting row ...")
@@ -87,27 +89,26 @@ func (w *Weather) IsValid(o orm.Ormer) error {
 		// elapsedTime := time.Until(lastRow.RequestedTime.UTC())
 		elapsedTime := time.Since(lastRow.RequestedTime.UTC())
 		// log.Printf("seconds: %v, LAPSE: %v, %v", elapsedTime.Seconds(), getLapse(), elapsedTime.Seconds() < getLapse())
-		if elapsedTime.Seconds() > getLapse(){
+		if elapsedTime.Seconds() > getLapse() {
 			log.Println("New row !!")
 			return nil
 		} else {
 			// still not pass enough time to save another row
 			return fmt.Errorf("You cant insert yet: seconds: %v", elapsedTime.Seconds())
-		}	//End time elapsed comparission
-	}// End QueryFilter if
+		} //End time elapsed comparission
+	} // End QueryFilter if
 }
 
 // GetAll Implementing GetAll method from Database to get All rows
-func (w *Weather) GetAll(o orm.Ormer)  ([]*Weather, error){
+func (w *Weather) GetAll(o orm.Ormer) ([]*Weather, error) {
 	log.Println("GetAll method")
-	var weathers []* Weather
+	var weathers []*Weather
 	_, err := o.QueryTable(new(Weather)).All(&weathers)
 	if err != nil {
 		log.Println(err)
 	}
 	return weathers, err
 }
-
 
 func init() {
 	// Need to register model in init
@@ -146,4 +147,3 @@ func FillingDBModel(source WheatherJSON) (resp Weather) {
 	resp.RequestedTime = time.Now() // .Format("2006-01-02 15:04:05")
 	return
 }
-

@@ -21,14 +21,21 @@ import (
 const FILEPATH = "/go/src/github.com/carojaspy/WeatherAPI/tests/"
 
 // SUCCESS_CITIES .
-const SUCCESS_CITIES = "json/SUCCES_CODES.json"
+const SUCCESS_CITIES = "txt/SUCCES_CODES.txt"
 
 // FAIL_CITIES .
-const FAIL_CITIES = "json/FAIL_CODES.json"
+const FAIL_CITIES = "txt/FAIL_CODES.txt"
 
 func init() {
 	_, file, _, _ := runtime.Caller(1)
 	log.Print(file)
+	log.Println(beego.AppConfig.String("runmode"))
+	log.Println(beego.AppConfig.String("mysqluser"))
+	log.Println(beego.AppConfig.String("mysqlpass"))
+	log.Println(beego.AppConfig.String("mysqldb"))
+	log.Println(beego.AppConfig.String("mysqlport"))
+	log.Println(beego.AppConfig.String("mysqlhost"))
+
 	// apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".."+string(filepath.Separator))))
 	//	Linux Path
 	// apppath := "/mnt/c/Users/carlosalberto.rojas/Desktop/go/src/github.com/carojaspy/WeatherAPI/"
