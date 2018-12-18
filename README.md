@@ -7,19 +7,16 @@ Weather proyect using beego framekwork
 The measure of time is in __time.info__ file.
 
 
-bee run -gendoc=true
-bee generate controller Weather
+## Change Weather provider
 
+The Weather provider is defined by weatherprovider in app.conf, there's two providers defined:
 
+To get Weather info from http://api.openweathermap.org/data/2.5/, must be
 
-docker build -t weather-api-image .
-docker-compose build
-docker-compose run
+    weatherprovider = APIProvider
 
+To get Weather from JSON files:
 
-dep.exe init
-dep.exe ensure -v
+    weatherprovider = FileProvider
 
-##### Enter to container in mode interactive
-docker exec -ti weather_api /bin/bash
 
