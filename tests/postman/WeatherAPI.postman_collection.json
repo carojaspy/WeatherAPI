@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "b391d17d-56c8-440b-a587-86347a2102c3",
+		"name": "WeatherAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PutScheduleTasks",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{HOST}}/v1/scheduler/weather?city=Mexico&country=mx",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"v1",
+						"scheduler",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "Mexico"
+						},
+						{
+							"key": "country",
+							"value": "mx"
+						}
+					]
+				},
+				"description": "Method PUT:\nCreate New Schedule Task\nPARAMS:\ncity: string - (Example: \"Mexico\")\ncountry: string - (Example: \"mx\")\n\n"
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllScheduleTasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{HOST}}/v1/scheduler/",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"v1",
+						"scheduler",
+						""
+					]
+				},
+				"description": "Method: GET\nFetch all the Schedule Tasks created\n\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Fail-GetWeather-Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{HOST}}/v1/weather",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"v1",
+						"weather"
+					]
+				},
+				"description": "Method: GET\nSend empty Get request to get weather\nMust be fail if is not sended city and country\nURL Params:\ncity: string\nCountry: string\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Success-GetWeather-Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4d19f27e-7a0e-4ad4-b87b-0d996cebedfb",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{HOST}}/v1/weather?city=Mexico&country=mx",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"v1",
+						"weather"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "Mexico"
+						},
+						{
+							"key": "country",
+							"value": "mx"
+						}
+					]
+				},
+				"description": "Method: GET\nRequest weather from a city, (Mexico, mx)\nURL Params:\ncity: string\nCountry: string\nhttp://localhost:8000/v1/weather?city=Mexico&country=mx"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2b4ba911-c32b-4427-b567-1ba18a9397f7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "20ee251c-46e6-454b-b2fb-a07f5e197e89",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "4e2de917-6e80-4a40-b4c4-8e8205da96e5",
+			"key": "HOST",
+			"value": "localhost:8000",
+			"type": "string"
+		}
+	]
+}
