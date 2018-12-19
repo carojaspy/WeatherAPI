@@ -1,8 +1,9 @@
 package main
 
 import (
-	_ "github.com/carojaspy/WeatherAPI/routers"
 	"fmt"
+
+	_ "github.com/carojaspy/WeatherAPI/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -27,20 +28,20 @@ func main() {
 	o.Using("default") // Using default, you can use other database
 
 	/*
-	CREATE SQL SCHEMA
-		// Database alias.
-		name := "default"
-		// Drop table and re-create.
-		force := true
-		// Print log.
-		verbose := true
-		// Error.
-		err := orm.RunSyncdb(name, force, verbose)
-		if err != nil {
-			fmt.Println(err)
-		}
+		CREATE SQL SCHEMA
+			// Database alias.
+			name := "default"
+			// Drop table and re-create.
+			force := true
+			// Print log.
+			verbose := true
+			// Error.
+			err := orm.RunSyncdb(name, force, verbose)
+			if err != nil {
+				fmt.Println(err)
+			}
 	*/
-		
+
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"

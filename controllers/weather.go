@@ -1,23 +1,25 @@
 package controllers
 
 import (
-	"time"
-	"WeatherAPI/models"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"errors"
+	"time"
+
+	"github.com/carojaspy/WeatherAPI/models"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
-// timeOffset . 
+// timeOffset .
 const timeOffset = 21600.0
-// LapseSeconds . 
-const LapseSeconds = - 300
+
+// LapseSeconds .
+const LapseSeconds = -300
 
 func getLapse() float64 {
 	// Returns the time to compare between 2 dates
@@ -29,9 +31,8 @@ type WeatherController struct {
 	beego.Controller
 }
 
-
 // GetWeatherFromProvider .
-func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,error){
+func GetWeatherFromProvider(city string, country string) (models.WheatherJSON, error) {
 	//
 	wjson := models.WheatherJSON{}
 
@@ -72,10 +73,10 @@ func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,e
 		return wjson, errors.New("Error Unpacking WeatherAPI info")
 	}
 	return wjson, nil
-}//end GetWeatherFromProvider
+} //end GetWeatherFromProvider
 
 // Get ...
-// @Title Get 
+// @Title Get
 // @Description get Weather by id
 // @Success 200 {object} models.Weather
 // @Failure 403 :id is empty
@@ -83,12 +84,9 @@ func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,e
 func (controller *WeatherController) Get() {
 	/**/
 	log.Print("Handle for Get WeatherController Requests")
-	log.Print(time.Now())
 	// Trying to retrieve the params from URL
-	city := controller.GetString("city") // Mexico
+	city := controller.GetString("city")       // Mexico
 	country := controller.GetString("country") // mx
-	// city := "Mexico" // Mexico
-	// country := "mx" // mx
 
 	// Calling Handler
 	wjson, err := GetWeatherFromProvider(city, country)
@@ -103,14 +101,13 @@ func (controller *WeatherController) Get() {
 	// Insert Weather to DB
 	o := orm.NewOrm()
 	qs := o.QueryTable(weatherdb) // return a QuerySeter
-	qs.Filter("Location", weatherdb.Location)
 
 	//var weather *models.Weather
 	var lastRow models.Weather
 	insertRow := false
 
 	// Just One row
-	err = qs.OrderBy("-Id").One(&lastRow)
+	err = qs.OrderBy("-Id").Filter("Location", weatherdb.Location).One(&lastRow)
 	if err != nil {
 		log.Println(err)
 		// No previous Rows, insert to DB
@@ -121,14 +118,15 @@ func (controller *WeatherController) Get() {
 
 		// log.Println(elapsedTime)
 		log.Printf("seconds: %v, LAPSE: %v, %v", elapsedTime.Seconds(), getLapse(), elapsedTime.Seconds() < getLapse())
-		if elapsedTime.Seconds() < getLapse(){
+		if elapsedTime.Seconds() < getLapse() {
 			log.Println("New row !!")
 			insertRow = true
 		} else {
 			// still not pass enough time to save another row
-			log.Println("You cant insert yet ")
+			log.Println("You cant insert yet")
+			// controller.CustomAbort(404, "You cant insert yet")
 		}
-	}// End
+	} // End
 	// If requests pass all validation, save in Databsae
 	if insertRow {
 		fmt.Println("Inserting row ...")
@@ -142,7 +140,7 @@ func (controller *WeatherController) Get() {
 }
 
 // GetAll ...
-// @Title GetAll 
+// @Title GetAll
 // @Description retrieve all Weather objects
 // @Success 200 {object} models.WeatherDB
 // @Failure 403 :id is empty

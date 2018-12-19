@@ -24,17 +24,17 @@ type WheatherJSON struct {
 
 // Weather .
 type Weather struct {
-	Id            int
-	Location      string
-	Temperature   string
-	Wind          string
-	Cloudines     string
-	Presure       string
-	Humidity      string
-	Sunrise       string
-	Sunset string 
+	Id             int
+	Location       string
+	Temperature    string
+	Wind           string
+	Cloudines      string
+	Presure        string
+	Humidity       string
+	Sunrise        string
+	Sunset         string
 	GeoCoordinates string
-	RequestedTime time.Time
+	RequestedTime  time.Time
 }
 
 func init() {
@@ -74,4 +74,3 @@ func FillingDBModel(source WheatherJSON) (resp Weather) {
 	resp.RequestedTime = time.Now() // .Format("2006-01-02 15:04:05")
 	return
 }
-
