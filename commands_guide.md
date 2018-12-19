@@ -25,8 +25,8 @@
 
 ##### Run the proyect using docker-compose
 
-    docker-compose run 
-    docker-compose run <container_name>
+    docker-compose up 
+    docker-compose up <container_name>
 
 ##### Create Gopkg.lock, vendor/ and Gopkg.toml
 
