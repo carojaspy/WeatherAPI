@@ -2,7 +2,7 @@
 
 
 [[projects]]
-  digest = "1:4e30b3c89af143a2a549afff5ef30e49d5d3bb2b6ab9d0bd133d375a7fe8d5d2"
+  digest = "1:3717c561d3573ba633c93ca05fcf7b5b31ab0558792290693825b38b56b9085a"
   name = "github.com/astaxie/beego"
   packages = [
     ".",
@@ -11,6 +11,7 @@
     "context/param",
     "grace",
     "logs",
+    "migration",
     "orm",
     "session",
     "toolbox",
@@ -100,6 +101,7 @@
   input-imports = [
     "github.com/astaxie/beego",
     "github.com/astaxie/beego/context/param",
+    "github.com/astaxie/beego/migration",
     "github.com/astaxie/beego/orm",
     "github.com/go-sql-driver/mysql",
     "github.com/smartystreets/goconvey/convey",
