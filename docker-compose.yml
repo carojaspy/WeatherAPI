@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  weather_api:
+    image: weather_api
+    container_name: weather_api
+    build:
+      context: .
+      dockerfile: 'Dockerfile'
+    volumes:
+      - ./:/go/src/github.com/carojaspy/WeatherAPI
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=weatherapi
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_PORT=3306
+      - MYSQL_HOST=weather_api_db
+    links:
+      - weather_api_db
+    depends_on:
+      - weather_api_db 
+    ports:
+      - 8000:8000
+    networks: 
+      - default
+
+  weather_api_db:   
+    image: mysql:5.7
+    container_name: weather_api_db
+    # volumes:
+    #       - ./mysql/data/dev:/var/lib/mysql
+    #       - ./conf/mysql:/etc/mysql/conf.d
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=weatherapi
+      
+    networks:
+      - default
+    ports:
+      - 3306:3306
+
