@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
@@ -28,21 +29,7 @@ const FAIL_CITIES = "txt/FAIL_CODES.txt"
 
 func init() {
 	_, file, _, _ := runtime.Caller(1)
-	log.Print(file)
-	log.Println(beego.AppConfig.String("runmode"))
-	log.Println(beego.AppConfig.String("mysqluser"))
-	log.Println(beego.AppConfig.String("mysqlpass"))
-	log.Println(beego.AppConfig.String("mysqldb"))
-	log.Println(beego.AppConfig.String("mysqlport"))
-	log.Println(beego.AppConfig.String("mysqlhost"))
-
-	// apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, ".."+string(filepath.Separator))))
-	//	Linux Path
-	// apppath := "/mnt/c/Users/carlosalberto.rojas/Desktop/go/src/github.com/carojaspy/WeatherAPI/"
-
-	//	Docker path
-	apppath := "/go/src/github.com/carojaspy/WeatherAPI/"
-	// apppath := "\\mnt\\c\\Users\\carlosalberto.rojas\\Desktop\\go\\src\\WeatherAPI\\"
+	apppath, _ := filepath.Abs(filepath.Dir(filepath.Join(file, "../.."+string(filepath.Separator))))
 
 	beego.TestBeegoInit(apppath)
 }

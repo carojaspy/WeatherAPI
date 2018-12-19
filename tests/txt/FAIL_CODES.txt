@@ -1,5 +1,5 @@
-Mexico,tac
-Brazil,bra
-Peru,per
-Uruguay,ur
-Venezuela,ven
+Mexicoo,tac
+Brazill,bra
+Peruu,per
+Uruguayy,ur
+Venezuelaa,ven
