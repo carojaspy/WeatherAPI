@@ -1,8 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -57,6 +62,9 @@ func (controller *WeatherController) Get() {
 	if err := weatherdb.IsValid(o); err == nil {
 		//Trying to to DB
 		weatherdb.Save(o)
+		// Saving the request
+		req := models.RequestWeather{City: city, Country: country, RequestedTime: time.Now()}
+		req.Save(o)
 	} else {
 		log.Println(err.Error())
 	}
