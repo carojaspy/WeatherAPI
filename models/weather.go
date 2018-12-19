@@ -19,10 +19,10 @@ func getLapse() float64 {
 
 // Database .
 type Database interface {
-	Get(o *orm.Ormer) error
-	GetAll(o *orm.Ormer) error
-	Save(o *orm.Ormer) error
-	IsValid(o *orm.Ormer) error
+	Get(o orm.Ormer) error
+	GetAll(o orm.Ormer) error
+	Save(o orm.Ormer) error
+	IsValid(o orm.Ormer) error
 }
 
 // WheatherJSON .
@@ -40,7 +40,7 @@ type WheatherJSON struct {
 	Wind    map[string]interface{}   `json:"wind,omitempty"`
 }
 
-// Weather .
+// Weather Model to persist the Info from provider
 type Weather struct {
 	Id             int
 	Location       string
@@ -53,6 +53,14 @@ type Weather struct {
 	Sunset         string
 	GeoCoordinates string
 	RequestedTime  time.Time
+}
+
+// RequestWeather Model to persist each requests to the API
+type RequestWeather struct {
+	Id            int
+	Country       string
+	City          string
+	RequestedTime time.Time
 }
 
 // Get Fetch a single object from Db
@@ -110,9 +118,11 @@ func (w *Weather) GetAll(o orm.Ormer) ([]*Weather, error) {
 	return weathers, err
 }
 
+// init method, to Register models on the ORM
 func init() {
 	// Need to register model in init
 	orm.RegisterModel(new(Weather))
+	orm.RegisterModel(new(RequestWeather))
 }
 
 // FillingResponse ..
@@ -146,4 +156,30 @@ func FillingDBModel(source WheatherJSON) (resp Weather) {
 	resp.GeoCoordinates = fmt.Sprintf("[%v, %v]", source.Coord["lat"], source.Coord["lon"])
 	resp.RequestedTime = time.Now() // .Format("2006-01-02 15:04:05")
 	return
+}
+
+// Get .
+func (request *RequestWeather) Get(o orm.Ormer) error {
+	return errors.New("Not implemented")
+}
+
+// GetAll .
+func (request *RequestWeather) GetAll(o orm.Ormer) error {
+	return errors.New("Not implemented")
+}
+
+// Save .
+func (request *RequestWeather) Save(o orm.Ormer) error {
+	// fmt.Println("Inserting row ...")
+	id, err := o.Insert(request)
+	if err == nil {
+		fmt.Printf("RequestWeather Row inserted with ID: %v", id)
+		return nil
+	}
+	return err
+}
+
+// IsValid .
+func (request *RequestWeather) IsValid(o orm.Ormer) error {
+	return errors.New("Not implemented")
 }
