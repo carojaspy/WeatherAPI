@@ -213,13 +213,7 @@ func GetWeatherFromFile(city string, country string) (WheatherJSON, error) {
 	wjson := WheatherJSON{}
 	city = strings.ToLower(city)
 	country = strings.ToLower(country)
-	ccwd, err := os.Getwd()
-	if err != nil {
-		log.Println("Error getting current path (cwd)", ccwd)
-		return wjson, errors.New("Error getting current path (cwd)")
-	}
-	weatherPath := fmt.Sprintf("%s/%s/%s_%s.json",
-		ccwd, beego.AppConfig.String("fileproviderpath"), city, country)
+	weatherPath := fmt.Sprintf("%s/%s_%s.json", beego.AppConfig.String("fileproviderpath"), city, country)
 	log.Println("Final PATH: ", weatherPath)
 	weatherInfo, err := os.Open(weatherPath)
 	if err != nil {
@@ -227,6 +221,8 @@ func GetWeatherFromFile(city string, country string) (WheatherJSON, error) {
 		return wjson, errors.New("Error Opening Weather File: ")
 	}
 	body, err := ioutil.ReadAll(weatherInfo)
+	//  Closing File
+	weatherInfo.Close()
 	// Building response
 	err = json.Unmarshal(body, &wjson)
 	if err != nil {
