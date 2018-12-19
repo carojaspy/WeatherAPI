@@ -1,11 +1,17 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"os"
+	"strings"
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -146,4 +152,77 @@ func FillingDBModel(source WheatherJSON) (resp Weather) {
 	resp.GeoCoordinates = fmt.Sprintf("[%v, %v]", source.Coord["lat"], source.Coord["lon"])
 	resp.RequestedTime = time.Now() // .Format("2006-01-02 15:04:05")
 	return
+}
+
+// GetWeatherFromAPI Returns the Weather info from API Provider
+func GetWeatherFromAPI(city string, country string) (WheatherJSON, error) {
+	//
+	wjson := WheatherJSON{}
+
+	// If params was sended, continue with requests
+	if city == "" || country == "" {
+		// error, incomplete params
+		log.Print("error, incomplete params, is needed city and country")
+		err := errors.New("error, incomplete params, is needed city and country")
+		return wjson, err
+	}
+	// Example URL to get Weather
+	// "http://api.openweathermap.org/data/2.5/weather?q=Bogota,co&appid=8a14e8c7b941473ca2bc48b9e055e5ba"
+	querystring := fmt.Sprintf("http://api.openweathermap.org/data/2.5/weather?q=%s,%s&appid=%s", city, country, "8a14e8c7b941473ca2bc48b9e055e5ba")
+	// log.Println(querystring)
+	resp, err := http.Get(querystring)
+	if err != nil {
+		// handle error
+		log.Println("Error getting Weather from api.openweathermap.org")
+		return wjson, err
+	}
+	if resp.StatusCode != 200 {
+		log.Println("Code Status invalid: ", resp.StatusCode)
+		str := fmt.Sprintf("404, Not found : City: %v - Country: %v", city, country)
+		return wjson, errors.New(str)
+	}
+	// Closing conection
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Print("Error reading result from api.openweathermap.org")
+		return wjson, errors.New("Error reading result from api.openweathermap.org")
+	}
+
+	// Building response
+	errUn := json.Unmarshal(body, &wjson)
+	if errUn != nil {
+		fmt.Println("Error in unmarshall: ", errUn)
+		return wjson, errors.New("Error Unpacking WeatherAPI info")
+	}
+	return wjson, nil
+} //end GetWeatherFromProvider
+
+// GetWeatherFromFile Returns the Weather info from JSON files
+func GetWeatherFromFile(city string, country string) (WheatherJSON, error) {
+	wjson := WheatherJSON{}
+	city = strings.ToLower(city)
+	country = strings.ToLower(country)
+	ccwd, err := os.Getwd()
+	if err != nil {
+		log.Println("Error getting current path (cwd)", ccwd)
+		return wjson, errors.New("Error getting current path (cwd)")
+	}
+	weatherPath := fmt.Sprintf("%s/%s/%s_%s.json",
+		ccwd, beego.AppConfig.String("fileproviderpath"), city, country)
+	log.Println("Final PATH: ", weatherPath)
+	weatherInfo, err := os.Open(weatherPath)
+	if err != nil {
+		log.Println("Error Opening Weather File: ", err.Error())
+		return wjson, errors.New("Error Opening Weather File: ")
+	}
+	body, err := ioutil.ReadAll(weatherInfo)
+	// Building response
+	err = json.Unmarshal(body, &wjson)
+	if err != nil {
+		log.Println("Error on Unmarshall data: ", err.Error())
+		return wjson, errors.New("Error on Unmarshall data: ")
+	}
+	log.Println("Succes on getting Info from Files: ", wjson)
+	return wjson, nil
 }

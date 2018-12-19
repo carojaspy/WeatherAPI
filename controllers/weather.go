@@ -1,87 +1,46 @@
 package controllers
 
 import (
-	"github.com/carojaspy/WeatherAPI/models"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
 	"errors"
+	"log"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/carojaspy/WeatherAPI/models"
 )
-
 
 // WeatherController operations for Weather
 type WeatherController struct {
 	beego.Controller
 }
 
-
-// GetWeatherFromProvider .
-func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,error){
-	//
+// GetWeather .
+func GetWeather(city string, country string) (models.WheatherJSON, error) {
+	provider := beego.AppConfig.String("weatherprovider")
 	wjson := models.WheatherJSON{}
-
-	// If params was sended, continue with requests
-	if city == "" || country == "" {
-		// error, incomplete params
-		log.Print("error, incomplete params, is needed city and country")
-		err := errors.New("error, incomplete params, is needed city and country")
-		return wjson, err
+	if provider == "APIProvider" {
+		log.Println("Getting Weather from APIProvider")
+		return models.GetWeatherFromAPI(city, country)
+	} else if provider == "FileProvider" {
+		return models.GetWeatherFromFile(city, country)
 	}
-	// Example URL to get Weather
-	// "http://api.openweathermap.org/data/2.5/weather?q=Bogota,co&appid=8a14e8c7b941473ca2bc48b9e055e5ba"
-	querystring := fmt.Sprintf("http://api.openweathermap.org/data/2.5/weather?q=%s,%s&appid=%s", city, country, "8a14e8c7b941473ca2bc48b9e055e5ba")
-	// log.Println(querystring)
-	resp, err := http.Get(querystring)
-	if err != nil {
-		// handle error
-		log.Println("Error getting Weather from api.openweathermap.org")
-		return wjson, err
-	}
-	if resp.StatusCode != 200 {
-		log.Println("Code Status invalid: ", resp.StatusCode)
-		str := fmt.Sprintf("404, Not found : City: %v - Country: %v", city, country)
-		return wjson, errors.New(str)
-	}
-	// Closing conection
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Print("Error reading result from api.openweathermap.org")
-		return wjson, errors.New("Error reading result from api.openweathermap.org")
-	}
-
-	// Building response
-	errUn := json.Unmarshal(body, &wjson)
-	if errUn != nil {
-		fmt.Println("Error in unmarshall: ", errUn)
-		return wjson, errors.New("Error Unpacking WeatherAPI info")
-	}
-	return wjson, nil
-}//end GetWeatherFromProvider
-
+	return wjson, errors.New("weatherprovider variable is not set, check your app.conf")
+}
 
 // Get ...
-// @Title Get 
+// @Title Get
 // @Description get Weather by id
 // @Success 200 {object} models.Weather
 // @Failure 403 :id is empty
 // @router / [get]
 func (controller *WeatherController) Get() {
 	/**/
-	log.Print("Handle for Get WeatherController Requests")
-	// log.Print(time.Now())
 	// Trying to retrieve the params from URL
-	city := controller.GetString("city") // Mexico
-	country := controller.GetString("country") // mx
-	// city := "Mexico" // Mexico
-	// country := "mx" // mx
+	city := controller.GetString("city")
+	country := controller.GetString("country")
 
 	// Calling Handler
-	wjson, err := GetWeatherFromProvider(city, country)
+	wjson, err := GetWeather(city, country)
 	if err != nil {
 		controller.CustomAbort(404, err.Error())
 	}
@@ -94,7 +53,7 @@ func (controller *WeatherController) Get() {
 	qs := o.QueryTable(weatherdb) // return a QuerySeter
 	qs.Filter("Location", weatherdb.Location)
 
-	//	Check if is a valid new row ( >300 seconds)	
+	//	Check if is a valid new row ( >300 seconds)
 	if err := weatherdb.IsValid(o); err == nil {
 		//Trying to to DB
 		weatherdb.Save(o)
@@ -103,11 +62,10 @@ func (controller *WeatherController) Get() {
 	}
 	controller.Data["json"] = weatherdb
 	controller.ServeJSON()
-}//End Get Method
-
+} //End Get Method
 
 // GetAll ...
-// @Title GetAll 
+// @Title GetAll
 // @Description retrieve all Weather objects
 // @Success 200 {object} models.WeatherDB
 // @Failure 403 :id is empty
@@ -126,4 +84,4 @@ func (controller *WeatherController) GetAll() {
 	log.Println(num)
 	controller.Data["json"] = weathers
 	controller.ServeJSON()
-}// End GetAll Method
+} // End GetAll Method
