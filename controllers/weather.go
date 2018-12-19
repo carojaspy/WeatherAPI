@@ -1,26 +1,26 @@
 package controllers
 
 import (
-	"github.com/carojaspy/WeatherAPI/models"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"errors"
+	"time"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/carojaspy/WeatherAPI/models"
 )
-
 
 // WeatherController operations for Weather
 type WeatherController struct {
 	beego.Controller
 }
 
-
 // GetWeatherFromProvider .
-func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,error){
+func GetWeatherFromProvider(city string, country string) (models.WheatherJSON, error) {
 	//
 	wjson := models.WheatherJSON{}
 
@@ -61,11 +61,10 @@ func GetWeatherFromProvider(city string, country string) (models.WheatherJSON ,e
 		return wjson, errors.New("Error Unpacking WeatherAPI info")
 	}
 	return wjson, nil
-}//end GetWeatherFromProvider
-
+} //end GetWeatherFromProvider
 
 // Get ...
-// @Title Get 
+// @Title Get
 // @Description get Weather by id
 // @Success 200 {object} models.Weather
 // @Failure 403 :id is empty
@@ -75,7 +74,7 @@ func (controller *WeatherController) Get() {
 	log.Print("Handle for Get WeatherController Requests")
 	// log.Print(time.Now())
 	// Trying to retrieve the params from URL
-	city := controller.GetString("city") // Mexico
+	city := controller.GetString("city")       // Mexico
 	country := controller.GetString("country") // mx
 	// city := "Mexico" // Mexico
 	// country := "mx" // mx
@@ -94,20 +93,22 @@ func (controller *WeatherController) Get() {
 	qs := o.QueryTable(weatherdb) // return a QuerySeter
 	qs.Filter("Location", weatherdb.Location)
 
-	//	Check if is a valid new row ( >300 seconds)	
+	//	Check if is a valid new row ( >300 seconds)
 	if err := weatherdb.IsValid(o); err == nil {
 		//Trying to to DB
 		weatherdb.Save(o)
+		// Saving the request
+		req := models.RequestWeather{City: city, Country: country, RequestedTime: time.Now()}
+		req.Save(o)
 	} else {
 		log.Println(err.Error())
 	}
 	controller.Data["json"] = weatherdb
 	controller.ServeJSON()
-}//End Get Method
-
+} //End Get Method
 
 // GetAll ...
-// @Title GetAll 
+// @Title GetAll
 // @Description retrieve all Weather objects
 // @Success 200 {object} models.WeatherDB
 // @Failure 403 :id is empty
@@ -126,4 +127,4 @@ func (controller *WeatherController) GetAll() {
 	log.Println(num)
 	controller.Data["json"] = weathers
 	controller.ServeJSON()
-}// End GetAll Method
+} // End GetAll Method
