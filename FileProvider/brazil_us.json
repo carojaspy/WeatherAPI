@@ -1,0 +1,42 @@
+{
+    "coord": {
+        "lon": -87.13,
+        "lat": 39.52
+    },
+    "weather": [
+        {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 277.34,
+        "pressure": 1023,
+        "humidity": 64,
+        "temp_min": 276.15,
+        "temp_max": 279.25
+    },
+    "visibility": 16093,
+    "wind": {
+        "speed": 2.6,
+        "deg": 120
+    },
+    "clouds": {
+        "all": 1
+    },
+    "dt": 1545155700,
+    "sys": {
+        "type": 1,
+        "id": 5408,
+        "message": 0.0044,
+        "country": "US",
+        "sunrise": 1545138250,
+        "sunset": 1545172019
+    },
+    "id": 4254884,
+    "name": "Brazil",
+    "cod": 200
+}

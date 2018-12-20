@@ -1,0 +1,5 @@
+Mexico,mx
+Brazil,us
+Peru,us
+Uruguay,bo
+Venezuela,cu

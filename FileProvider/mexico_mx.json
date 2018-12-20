@@ -1,0 +1,41 @@
+{
+    "coord": {
+        "lon": -111.63,
+        "lat": 28.62
+    },
+    "weather": [
+        {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 292.933,
+        "pressure": 1028.18,
+        "humidity": 40,
+        "temp_min": 292.933,
+        "temp_max": 292.933,
+        "sea_level": 1033.17,
+        "grnd_level": 1028.18
+    },
+    "wind": {
+        "speed": 2.16,
+        "deg": 14.5052
+    },
+    "clouds": {
+        "all": 0
+    },
+    "dt": 1545156977,
+    "sys": {
+        "message": 0.0289,
+        "country": "MX",
+        "sunrise": 1545142436,
+        "sunset": 1545179598
+    },
+    "id": 3991622,
+    "name": "Mexico",
+    "cod": 200
+}

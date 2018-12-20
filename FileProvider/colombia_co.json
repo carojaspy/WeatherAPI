@@ -1,0 +1,42 @@
+{
+    "coord": {
+        "lon": -74.08,
+        "lat": 4.6
+    },
+    "weather": [
+        {
+            "id": 802,
+            "main": "Clouds",
+            "description": "scattered clouds",
+            "icon": "03d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 294.15,
+        "pressure": 1026,
+        "humidity": 37,
+        "temp_min": 294.15,
+        "temp_max": 294.15
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 2.6,
+        "deg": 280
+    },
+    "clouds": {
+        "all": 40
+    },
+    "dt": 1545152400,
+    "sys": {
+        "type": 1,
+        "id": 8582,
+        "message": 0.0335,
+        "country": "CO",
+        "sunrise": 1545130655,
+        "sunset": 1545173349
+    },
+    "id": 3688689,
+    "name": "Bogota",
+    "cod": 200
+}

@@ -1,0 +1,41 @@
+{
+    "coord": {
+        "lon": -78.8,
+        "lat": 21.74
+    },
+    "weather": [
+        {
+            "id": 801,
+            "main": "Clouds",
+            "description": "few clouds",
+            "icon": "02d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 300.233,
+        "pressure": 1027.53,
+        "humidity": 88,
+        "temp_min": 300.233,
+        "temp_max": 300.233,
+        "sea_level": 1029.89,
+        "grnd_level": 1027.53
+    },
+    "wind": {
+        "speed": 2.36,
+        "deg": 49.0052
+    },
+    "clouds": {
+        "all": 12
+    },
+    "dt": 1545156830,
+    "sys": {
+        "message": 0.0038,
+        "country": "CU",
+        "sunrise": 1545133677,
+        "sunset": 1545172593
+    },
+    "id": 3534432,
+    "name": "Venezuela",
+    "cod": 200
+}
