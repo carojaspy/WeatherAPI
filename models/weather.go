@@ -77,9 +77,9 @@ func (w *Weather) Get(o orm.Ormer) error {
 // Save Persist the Objet to the Database
 func (w *Weather) Save(o orm.Ormer) error {
 	// fmt.Println("Inserting row ...")
-	id, err := o.Insert(w)
+	_, err := o.Insert(w)
 	if err == nil {
-		fmt.Printf("Weather Row inserted with ID: %v", id)
+		// log.Printf("Weather Row inserted with ID: %v", id)
 		return nil
 	}
 	return err
@@ -211,10 +211,17 @@ func GetWeatherFromAPI(city string, country string) (WheatherJSON, error) {
 // GetWeatherFromFile Returns the Weather info from JSON files
 func GetWeatherFromFile(city string, country string) (WheatherJSON, error) {
 	wjson := WheatherJSON{}
+	// If params was sended, continue with requests
+	if city == "" || country == "" {
+		// error, incomplete params
+		log.Print("error, incomplete params, is needed city and country")
+		err := errors.New("error, incomplete params, is needed city and country")
+		return wjson, err
+	}
+
 	city = strings.ToLower(city)
 	country = strings.ToLower(country)
 	weatherPath := fmt.Sprintf("%s/%s_%s.json", beego.AppConfig.String("fileproviderpath"), city, country)
-	log.Println("Final PATH: ", weatherPath)
 	weatherInfo, err := os.Open(weatherPath)
 	if err != nil {
 		log.Println("Error Opening Weather File: ", err.Error())
@@ -229,7 +236,7 @@ func GetWeatherFromFile(city string, country string) (WheatherJSON, error) {
 		log.Println("Error on Unmarshall data: ", err.Error())
 		return wjson, errors.New("Error on Unmarshall data: ")
 	}
-	log.Println("Succes on getting Info from Files: ", wjson)
+	// log.Println("Succes on getting Info from Files: ", wjson)
 	return wjson, nil
 }
 
@@ -248,7 +255,7 @@ func (request *RequestWeather) Save(o orm.Ormer) error {
 	// fmt.Println("Inserting row ...")
 	id, err := o.Insert(request)
 	if err == nil {
-		fmt.Printf("RequestWeather Row inserted with ID: %v", id)
+		log.Printf("RequestWeather Row inserted with ID: %v \n", id)
 		return nil
 	}
 	return err
@@ -258,4 +265,3 @@ func (request *RequestWeather) Save(o orm.Ormer) error {
 func (request *RequestWeather) IsValid(o orm.Ormer) error {
 	return errors.New("Not implemented")
 }
-
