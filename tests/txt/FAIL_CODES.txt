@@ -1,0 +1,5 @@
+Mexicoo,tac
+Brazill,bra
+Peruu,per
+Uruguayy,ur
+Venezuelaa,ven

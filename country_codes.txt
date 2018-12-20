@@ -1,0 +1,11 @@
+Examples of valid City and Country codes to get Weather
+
+
+City        Country
+-------------------
+Mexico      mx
+Brazil      us
+Peru        us
+Uruguay     bo
+Venezuela   cu
+

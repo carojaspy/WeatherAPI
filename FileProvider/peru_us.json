@@ -1,0 +1,42 @@
+{
+    "coord": {
+        "lon": -89.13,
+        "lat": 41.33
+    },
+    "weather": [
+        {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 277.65,
+        "pressure": 1022,
+        "humidity": 68,
+        "temp_min": 276.85,
+        "temp_max": 278.65
+    },
+    "visibility": 16093,
+    "wind": {
+        "speed": 5.7,
+        "deg": 170
+    },
+    "clouds": {
+        "all": 1
+    },
+    "dt": 1545155700,
+    "sys": {
+        "type": 1,
+        "id": 6216,
+        "message": 0.0277,
+        "country": "US",
+        "sunrise": 1545139069,
+        "sunset": 1545172161
+    },
+    "id": 4905770,
+    "name": "Peru",
+    "cod": 200
+}

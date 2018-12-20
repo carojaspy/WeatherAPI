@@ -1,0 +1,44 @@
+{
+    "coord": {
+        "lon": -64.15,
+        "lat": -20.52
+    },
+    "weather": [
+        {
+            "id": 501,
+            "main": "Rain",
+            "description": "moderate rain",
+            "icon": "10d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 291.083,
+        "pressure": 855.76,
+        "humidity": 100,
+        "temp_min": 291.083,
+        "temp_max": 291.083,
+        "sea_level": 1022.11,
+        "grnd_level": 855.76
+    },
+    "wind": {
+        "speed": 0.31,
+        "deg": 169.505
+    },
+    "rain": {
+        "3h": 5.495
+    },
+    "clouds": {
+        "all": 92
+    },
+    "dt": 1545157085,
+    "sys": {
+        "message": 0.0036,
+        "country": "BO",
+        "sunrise": 1545125536,
+        "sunset": 1545173701
+    },
+    "id": 6621199,
+    "name": "Uruguay",
+    "cod": 200
+}
