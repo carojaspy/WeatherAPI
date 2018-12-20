@@ -28,6 +28,22 @@ func GetWeather(city string, country string) (models.WheatherJSON, error) {
 	return wjson, errors.New("weatherprovider variable is not set, check your app.conf")
 }
 
+// WeatherTask  Get the Weather and persists to Database  (SYNC)
+func WeatherTask(city string, country string, o orm.Ormer) {
+	// log.Printf("Done Task %v - %s", city, country)
+	result, err := GetWeather(city, country)
+	if err != nil {
+		log.Printf("Error Running Task %v - %s : %v", city, country, err.Error())
+		return
+	}
+	// response := models.FillingResponse(wjson)
+	weatherdb := models.Weather{}
+	weatherdb = models.FillingDBModel(result)
+	//Trying to to DB
+	weatherdb.Save(o)
+	// Continue
+}
+
 // Get ...
 // @Title Get
 // @Description get Weather by id
