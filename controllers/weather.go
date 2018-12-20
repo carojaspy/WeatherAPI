@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"WeatherAPI/models"
+	"github.com/carojaspy/WeatherAPI/models"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -31,7 +31,7 @@ func (controller *WeatherController) Get() {
 	if city == "" || country == "" {
 		// error, incomplete params
 		log.Print("error, incomplete params, is needed city and country")
-		controller.Abort("401")
+		controller.Abort("404")
 	}
 	// If params was sended, continue with requests
 

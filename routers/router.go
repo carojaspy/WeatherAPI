@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"WeatherAPI/controllers"
+	"github.com/carojaspy/WeatherAPI/controllers"
 
 	"github.com/astaxie/beego"
 )
