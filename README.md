@@ -20,3 +20,13 @@ To get Weather from JSON files:
     weatherprovider = FileProvider
 
 
+## Preload Data
+
+In the path /tests/data/ there's two .sql scripts
+
+
+- **db_backup.sql** : Contains all the database (Create tables, and insert data)
+
+- **db_data.sql** : Contains just the rows (Periodic Tasks, Weather info, Requests)
+
+
